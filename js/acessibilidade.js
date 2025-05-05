@@ -4,6 +4,16 @@ document.getElementById("acessibilidade-btn").addEventListener("click", function
   menu.style.display = (menu.style.display === "flex") ? "none" : "flex";
 });
 
+// **NOVO CÓDIGO** - Adicionar evento de clique no documento para fechar o menu quando clicar fora dele
+document.addEventListener('click', function(event) {
+  let menuAcessibilidade = document.getElementById('acessibilidade-menu');
+  let botaoAcessibilidade = document.getElementById('acessibilidade-btn');
+
+  if (menuAcessibilidade.style.display === 'flex' && !menuAcessibilidade.contains(event.target) && event.target !== botaoAcessibilidade) {
+    fecharMenuAcessibilidade();
+  }
+});
+
 // Função para fechar o menu de acessibilidade
 function fecharMenuAcessibilidade() {
   document.getElementById("acessibilidade-menu").style.display = "none";
@@ -92,7 +102,7 @@ function leituraTexto() {
   speech.rate = 1;
   speech.onend = function () {
     // Permitir que o usuário interaja com a página novamente
-    document.body.style.pointerEvents = 'auto';
+    document.body.style.pointerEvents = 'none';
     cancelarLeitura()
   };
   window.speechSynthesis.speak(speech);
@@ -110,10 +120,11 @@ function cancelarLeitura() {
   botao.style.opacity = "0";
   botao.style.visibility = "hidden";
   if (speech !== null) {
-    window.speechSynthesis.cancel();
+    window.speechSynthesis.cancel(speech);
     leituraEmAndamento = false;
     leitorRodando = false;
   }
+  document.body.style.pointerEvents = 'all'; //adicionado para que o site fique disponivel para alteração novamente
 }
 
 document.addEventListener("DOMContentLoaded", function () {
